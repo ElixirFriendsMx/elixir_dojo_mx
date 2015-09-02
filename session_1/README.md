@@ -11,9 +11,12 @@ We reviewed the following topics with examples:
 - Lists, tuples and keyword lists.
 - Importance of the Enum module. e.g. Enum.map
 - Conditionasl (if, cond, case)
-- Basic usage of mix to create, compile and execute test suites.
+- Basic usage of mix to create and compile projects and to execute test suites.
 - Creation of simple tests with ExUnit and how to run our tests in parallel.
-- Basic usage of iex loading our project dependencies and modules.
+- Basic usage of iex:
+  - autocompletion
+  - consulting documentation
+  - loading our project dependencies and modules.
 
 After that we formed couples to implement the classic FizzBuzz with unit tests.
 

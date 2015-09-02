@@ -9,9 +9,11 @@ rates can be expressed as a keyword list
 
 ```elixir
 tax_rates = [ NC: 0.075, TX: 0.08 ]
+```
 
 Here’s a list of orders:
 
+```elixir
 orders = [
   [ id: 123, ship_to: :NC, net_amount: 100.00 ],
   [ id: 124, ship_to: :OK, net_amount:  35.50 ], 

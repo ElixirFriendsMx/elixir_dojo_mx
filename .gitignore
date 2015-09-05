@@ -5,3 +5,4 @@ erl_crash.dump
 *.beam
 _build
 .DS_Store
+*.sw?

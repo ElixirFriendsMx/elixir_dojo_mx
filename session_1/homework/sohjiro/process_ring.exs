@@ -1,10 +1,10 @@
 defmodule ProcessRing do
 
   def start do
-    for n <- 1..5, do: spawn(&loop/0)
+    for _n <- 1..5, do: spawn_monitor(&loop/0)
   end
 
-  def loop do
+  defp loop do
     receive do
       {message, n} ->
         IO.puts "message : #{message} with n : #{n}"
@@ -12,6 +12,10 @@ defmodule ProcessRing do
       {:error, :timeout}
     end
     loop
+  end
+
+  def process_message({message, n}) do
+    IO.puts "message : #{message} with n : #{n}"
   end
 
 end

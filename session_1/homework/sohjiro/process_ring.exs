@@ -1,7 +1,13 @@
 defmodule ProcessRing do
 
   def start do
-    for _n <- 1..5, do: spawn_monitor(&loop/0)
+    for n <- 1..5 do
+      spawn_monitor(fn ->
+        register_name = to_string([97 + n]) |> String.to_atom
+        Process.register(self, register_name)
+        loop()
+      end)
+    end
   end
 
   defp loop do
@@ -14,8 +20,6 @@ defmodule ProcessRing do
     loop
   end
 
-  def process_message({message, n}) do
-    IO.puts "message : #{message} with n : #{n}"
-  end
+  def send_message(atom, {message, n}), do: send(atom, {message, n})
 
 end

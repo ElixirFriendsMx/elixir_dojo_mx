@@ -17,20 +17,28 @@ defmodule FizzbuzzTest do
   end
   
   test "When must Fizz" do
-    assert Enum.map(1..@maxTestN, fn n -> String.contains? fizzbuzz(n * 3), "Fizz" end) == Enum.map(1..@maxTestN, fn _ -> true end)
+    1..@maxTestN
+      |> Enum.all? &(String.contains? fizzbuzz(&1 * 3), "Fizz")
+      |> assert
   end
   
   test "When must Buzz" do
-    assert Enum.map(1..@maxTestN, fn n -> String.contains? fizzbuzz(n * 5), "Buz" end) == Enum.map(1..@maxTestN, fn _ -> true end)
+    1..@maxTestN
+      |> Enum.all? &(String.contains? fizzbuzz(&1 * 5), "Buzz")
+      |> assert
   end
   
   test "When must FizzBuzz" do
-    assert Enum.map(1..@maxTestN, fn n -> fizzbuzz(n * 3 * 5) end) == Enum.map(1..@maxTestN, fn _ -> "FizzBuzz" end)
+    1..@maxTestN
+      |> Enum.all? &(fizzbuzz(&1 * 3 * 5) == "FizzBuzz")
+      |> assert
   end
   
   test "When must not Fizz nor Buzz nor nuttin'" do
-    s = Enum.filter(1..@maxTestN, fn x -> rem(x,3) != 0 and rem(x,5) != 0 end)
-    assert Enum.map(s, fn n -> fizzbuzz(n) end) == Enum.map(s, fn n -> n end)
+    1..@maxTestN
+      |> Enum.filter(&(not divisible?(&1, 3) and not divisible?(&1, 5)))
+      |> Enum.all? &(fizzbuzz(&1) == &1)
+      |> assert
   end
   
 end

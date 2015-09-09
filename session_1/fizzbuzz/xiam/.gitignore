@@ -2,7 +2,3 @@
 /deps
 erl_crash.dump
 *.ez
-*.beam
-_build
-.DS_Store
-*.sw?

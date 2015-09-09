@@ -14,28 +14,28 @@ defmodule RingProcess do
 
   defp loop_a do
     receive do
-      {_message, 0} ->
+      {_message, _times, 0} ->
         IO.puts "Process terminated in :server_a"
-      {message, times} ->
-        IO.puts "ping: :message : #{message} times : #{times}"
-        send(:server_b, {message, times - 1})
+      {message, times, remaining} ->
+        IO.puts "ping: :message : #{message} times : #{times}, remaining : #{remaining}"
+        send(:server_b, {message, times, remaining})
+        loop_a
     end
-    loop_a
   end
 
   defp loop_b do
     receive do
-      {_message, 0} ->
+      {_message, _times, 0} ->
         IO.puts "Process terminated in :server_b"
-      {message, times} ->
-        IO.puts "pong: message : #{message} times : #{times}"
-        send(:server_a, {message, times - 1})
+      {message, times, remaining} ->
+        IO.puts "pong: :message : #{message} times : #{times}, remaining : #{remaining}"
+        send(:server_a, {message, times, remaining - 1})
+        loop_b
     end
-    loop_b
   end
 
   def send_message(message, times) do
-    send(:server_a, {message, times})
+    send(:server_a, {message, times, times})
   end
 
 end

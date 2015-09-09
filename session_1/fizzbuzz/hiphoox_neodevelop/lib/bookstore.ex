@@ -8,9 +8,9 @@ defmodule Bookstore do
     #case {id, ship_to, net_amount} do
     #end
     case [id,ship_to,net_amount] do
-      [_, {:ship_to, :NC},_] -> [id,ship_to,net_amount,{:total_amount, 10.00}]
-      [_, {:ship_to, :TX},_] -> [id,ship_to,net_amount,{:total_amount, 20.00}]
-      [_,_,_] -> [id,ship_to,net_amount,{:total_amount, 0.00}]
+      [_, {:ship_to, :NC},_] -> [id,ship_to,net_amount,{:total_amount, elem(net_amount,1) * 1.075}]
+      [_, {:ship_to, :TX},_] -> [id,ship_to,net_amount,{:total_amount, elem(net_amount,1) * 1.080}]
+      [_,_,_] -> [id,ship_to,net_amount,{:total_amount, elem(net_amount,1)}]
     end
   end
 

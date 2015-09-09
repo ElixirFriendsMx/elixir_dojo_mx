@@ -1,2 +1,0 @@
-defmodule Ring do
-end

@@ -9,8 +9,13 @@ defmodule RingProcess do
 
   defp loop do
     receive do
+      {_, _, 0} ->
+        IO.puts "Ending ring process"
       {[h | t], message, times} ->
         IO.puts "#{inspect h}, #{inspect t}, #{message} : #{times}"
+        send(h, message)
+        :timer.sleep(1000)
+        send(:ring, {t ++ [h], message, times - 1})
         loop()
     end
   end
@@ -22,13 +27,11 @@ defmodule RingProcess do
 end
 
 defmodule NodeProcess do
-
   def loop do
     receive do
       message ->
-        IO.puts "message incoming : #{message}"
+        IO.puts "#{inspect self} : #{message}"
         loop()
     end
   end
-
 end

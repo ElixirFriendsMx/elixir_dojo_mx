@@ -1,4 +1,8 @@
-ProcessRing
-===========
+Homework for Session 1
+======================
 
-** TODO: Add description **
+Exercises:
+
+- Process Ring
+- Bookstore taxes
+

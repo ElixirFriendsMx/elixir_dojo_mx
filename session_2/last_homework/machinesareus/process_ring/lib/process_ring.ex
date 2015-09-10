@@ -1,0 +1,2 @@
+defmodule ProcessRing do
+end

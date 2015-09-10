@@ -9,6 +9,8 @@ defmodule RingProcess do
 
   defp loop do
     receive do
+      {pid, :kill} ->
+        send(pid, {:exit})
       {_, _, 0} ->
         IO.puts "Ending ring process"
       {[h | t], message, times} ->
@@ -20,6 +22,10 @@ defmodule RingProcess do
     end
   end
 
+  def end_process(pid) do
+    send(:ring, {pid, :kill})
+  end
+
   def send_message(nodes, {message, times}) do
     send(:ring, {nodes, message, times})
   end
@@ -29,6 +35,8 @@ end
 defmodule NodeProcess do
   def loop do
     receive do
+      {:exit} ->
+        IO.puts "Ending message"
       message ->
         IO.puts "#{inspect self} : #{message}"
         loop()

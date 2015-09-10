@@ -13,6 +13,7 @@ defmodule RingProcess do
         send(pid, {:exit})
       {_, _, 0} ->
         IO.puts "Ending ring process"
+        loop()
       {[h | t], message, times} ->
         IO.puts "#{inspect h}, #{inspect t}, #{message} : #{times}"
         send(h, message)

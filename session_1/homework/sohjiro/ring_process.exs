@@ -15,7 +15,6 @@ defmodule RingProcess do
         IO.puts "Ending ring process"
         loop()
       {[h | t], message, times} ->
-        IO.puts "#{inspect h}, #{inspect t}, #{message} : #{times}"
         send(h, message)
         :timer.sleep(1000)
         send(:ring, {t ++ [h], message, times - 1})

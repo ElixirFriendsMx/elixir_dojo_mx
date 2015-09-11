@@ -1,13 +1,13 @@
 defmodule ConsoleGreeter do
-  def greet(id) when is_integer(id) do
+  def greet do
     receive do
       :greet ->
-        IO.puts "Hello world: from #{id}"
-        greet id
+        IO.puts "Hello world: from #{inspect self}"
+        greet
       :bye ->
-        IO.puts "bye pid #{id}"
+        IO.puts "bye pid #{inspect self}"
       _ ->
-        greet id
+        greet
     end
   end
 end

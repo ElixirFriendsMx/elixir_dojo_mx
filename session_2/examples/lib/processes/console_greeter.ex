@@ -2,7 +2,13 @@ defmodule ConsoleGreeter do
 
   def greet do
     receive do
-      :do_it -> IO.puts "hello world!"
+      :greet -> 
+        IO.puts "hello world! from #{inspect self}"
+        greet 
+      :bye -> 
+        IO.puts "bye! from #{inspect self}"
+      _ ->
+        greet
     end
   end
 

@@ -6,11 +6,11 @@ defmodule PoliteGreeter do
       {:greet, who, source} ->
         send source, "Hello #{who}!"
         start_greeting()
-      {:exit} -> 
+      :exit -> 
         :ok
       _ -> 
         Logger.info "Unrecognized message"
-        start_greeting() 
+        start_greeting 
     end
   end
 end

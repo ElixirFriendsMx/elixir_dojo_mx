@@ -5,9 +5,9 @@ defmodule Metex.Worker do
     result = url_for(location) |> HTTPoison.get |> parse_response
     case result do
       {:ok, temp} ->
-        "#{location}: #{temp}°C"
+        {:ok, "#{location}: #{temp}"}
       :error ->
-        "#{location} not found"
+        {:error, "#{location} not found"}
     end 
   end
 
@@ -34,17 +34,15 @@ defmodule Metex.Worker do
     end
   end
 
-end
+  require Logger
 
-#  require Logger
-#
-#  def loop do
-#    receive do
-#      {sender_pid, location} ->
-#        send sender_pid, temperature_of(location)
-#      _ ->
-#        Logger.warn "Unknown message"
-#    end
-#  end
-#
-#end
+  def loop do
+    receive do
+      {sender_pid, location} ->
+        send sender_pid, temperature_of(location)
+      _ ->
+        Logger.warn "Unknown message"
+    end
+  end
+
+end

@@ -8,6 +8,12 @@ defmodule Metex.Coordinator do
           send self, :exit
         end
         loop(new_results, results_expected)
+      {:error, result} ->
+        new_results_expected = results_expected - 1
+        if new_results_expected == length(results) do
+          send self, :exit
+        end
+        loop(results, new_results_expected)
       :exit ->
         results |> Enum.sort |> Enum.join(", ") |> IO.puts
       _ ->
@@ -15,6 +21,6 @@ defmodule Metex.Coordinator do
         Logger.debug "Unknow message"
         loop(results, results_expected)
     end
-  end 
+  end
 
 end

@@ -1,45 +1,70 @@
 defmodule RingProcess do
-  def start do
-    spawn(fn ->
-      Process.register(self, :ring)
-      loop()
-    end)
-    for _n <- 1..5, do: spawn(NodeProcess, :loop, [])
-  end
 
-  defp loop do
+  def start do
+    pid = spawn(RingProcess, :init, [self])
     receive do
-      {pid, :kill} ->
-        send(pid, {:exit})
-      {_, _, 0} ->
-        IO.puts "Ending ring process"
-        loop()
-      {[h | t], message, times} ->
-        send(h, message)
-        :timer.sleep(1000)
-        send(:ring, {t ++ [h], message, times - 1})
-        loop()
+      process ->
+        {pid, process}
     end
   end
 
-  def end_process(pid) do
-    send(:ring, {pid, :kill})
+  def init(caller) do
+    process = for _n <- 1..5, do: spawn_monitor(NodeProcess, :loop, [self])
+    send(caller, process)
+    loop(process)
   end
 
-  def send_message(nodes, {message, times}) do
-    send(:ring, {nodes, message, times})
+  defp loop(process) do
+    receive do
+      {:DOWN, ref, _, pid, _} ->
+        IO.puts "down with pid : #{inspect pid}"
+        process = List.delete(process, {pid, ref})
+        case Enum.empty? process do
+          true ->
+            IO.puts "My job here is done"
+          _ ->
+            loop process
+        end
+
+      {:next, {msg, times}, pid_incoming} when times >= 0 ->
+        process = [{pid, _ref} | _t] = calculate_next(process, pid_incoming)
+        send(pid, {msg, times})
+        loop(process)
+
+      :exit ->
+        for {pid, _ref} <- process, do: send(pid, :exit)
+    end
   end
 
+  defp calculate_next([h = {pid, _ref} | t], pid_incoming) when pid == pid_incoming do
+    t ++ [h]
+  end
+
+  defp calculate_next([h | t], pid_incoming)do
+    calculate_next(t ++ [h], pid_incoming)
+  end
 end
 
+
 defmodule NodeProcess do
-  def loop do
+
+  def loop(caller) do
     receive do
-      {:exit} ->
-        IO.puts "Ending message"
-      message ->
-        IO.puts "#{inspect self} : #{message}"
-        loop()
+      :exit ->
+        IO.puts "Terminating #{inspect self}"
+
+      {_msg, 0} ->
+        loop(caller)
+
+      {msg, times} ->
+        IO.puts "echo : #{inspect msg} in #{inspect self}. Notifying to #{inspect caller}"
+        send(caller, {:next, {msg, times - 1}, self})
+        loop(caller)
+
+      _ ->
+        IO.puts "These isn't the message you're looking for"
+        loop(caller)
     end
   end
+
 end

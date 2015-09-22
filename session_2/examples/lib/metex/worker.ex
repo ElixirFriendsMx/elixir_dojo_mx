@@ -7,7 +7,7 @@ defmodule Metex.Worker do
       {:ok, temp} ->
         {:ok, "#{location}: #{temp}"}
       :error ->
-        :error
+        {:error, "none"}
     end
   end
 
@@ -45,7 +45,7 @@ defmodule Metex.Worker do
       {sender_pid, location} ->
         send sender_pid, temperature_of(location)
       _ ->
-        Logger.warn "Unknown message"
+        Logger.warn "Unknown message from Worker"
     end
   end
 

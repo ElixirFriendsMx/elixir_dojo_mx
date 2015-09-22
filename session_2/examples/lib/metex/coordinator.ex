@@ -1,8 +1,10 @@
 defmodule Metex.Coordinator do
-
+  require Logger
+  
   def loop(results \\ [], results_expected) do
     receive do
       {:ok, result} ->
+        Logger.debug ":ok"
         new_results = [result|results]
         if results_expected == length(new_results) do
           send self, :exit
@@ -17,8 +19,7 @@ defmodule Metex.Coordinator do
       :exit ->
         results |> Enum.sort |> Enum.join(", ") |> IO.puts
       _ ->
-        require Logger
-        Logger.debug "Unknow message"
+        Logger.debug "Unknow message from Coordinator"
         loop(results, results_expected)
     end
   end

@@ -1,3 +1,0 @@
-defmodule MewModule do
-
-end

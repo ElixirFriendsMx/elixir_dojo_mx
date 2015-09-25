@@ -3,9 +3,9 @@ defmodule PoliteGreeter do
 
   def start_greeting do
     receive do 
-      {:greet, who, source} ->
-        send source, "Hello #{who}!"
-        start_greeting()
+      {:greet, who, dest} ->
+        send dest, "Hello #{who}!"
+        start_greeting
       :exit -> 
         :ok
       _ -> 

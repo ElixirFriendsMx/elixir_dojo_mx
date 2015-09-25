@@ -8,7 +8,7 @@ defmodule Metex.Worker do
         {:ok, "#{location}: #{temp}"}
       :error ->
         {:error, "#{location} not found"}
-    end 
+    end
   end
 
   defp url_for(location) do
@@ -20,11 +20,11 @@ defmodule Metex.Worker do
     #body |> Logger.debug
     body |> JSON.decode! |> compute_temperature
   end
-  
+
   defp parse_response(_) do
     :error
   end
-  
+
   defp compute_temperature(json) do
     try do
       temp = (json["main"]["temp"] - 273.15) |> Float.round(1)
@@ -41,7 +41,7 @@ defmodule Metex.Worker do
       {sender_pid, location} ->
         send sender_pid, temperature_of(location)
       _ ->
-        Logger.warn "Unknown message"
+        Logger.warn "Unknown message in Worker"
     end
   end
 

@@ -30,6 +30,8 @@ defmodule RingCoordinator do
           _ ->
             loop remaining
         end
+      _ ->
+        loop pids
     end
   end
 

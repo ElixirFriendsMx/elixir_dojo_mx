@@ -1,5 +1,5 @@
 Escape from Zurg
-================
+----------------
 
 Solution to "Escape from Zurg" made by @licuadolala and @MachinesAreUs.
 

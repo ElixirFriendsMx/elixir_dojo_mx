@@ -1,6 +1,12 @@
 defmodule Traps do
+  require Logger
+
   def run do
     spawn __MODULE__, :init, []
+  end
+
+  def run_monitored do
+    spawn_monitor __MODULE__, :init, []
   end
 
   def init do
@@ -9,12 +15,12 @@ defmodule Traps do
   end
 
   def loop do
-    IO.puts "waiting to die..."
+    Logger.info "waiting to die..."
     receive do
       msg -> 
-        IO.puts "(⊙＿⊙') somebody tried to kill me! #{inspect msg}" 
-      after 1000 ->
-        IO.puts "Nobody tried to kill me! ^_^"
+        Logger.info "(⊙＿⊙') somebody tried to kill me! #{inspect msg}" 
+      after 500 ->
+        Logger.info "Nobody tried to kill me! ^_^"
     end
     loop
   end

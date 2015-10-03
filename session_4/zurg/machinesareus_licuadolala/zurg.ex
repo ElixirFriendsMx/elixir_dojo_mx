@@ -4,16 +4,17 @@ defmodule Zurg do
   @toys %{buzz: 5, woody: 10, rex: 20, hamm: 25}
 
   def solve() do
-    left = Map.keys @toys
-    right = []
-    time = 0
-    complete_sequences([{:right, time, left, right, []}])
-      |> sort(&compare_solutions/2)  
+    time  = 0
+    left  = Map.keys @toys
+    right = steps = []
+    [{:right, time, left, right, steps}]
+      |> complete_sequences
+      |> sort(&compare/2)  
       |> take 1
   end
 
   def complete_sequences(sequences) do
-    if finished? sequences do
+    if complete? sequences do
       sequences
     else  
       sequences |> map(&next_steps/1)
@@ -22,12 +23,12 @@ defmodule Zurg do
     end                   
   end
 
-  def finished?(sequences) do
+  def complete?(sequences) do
     {_, _, left, _, _} = at sequences, 0
     empty? left
   end
 
-  def compare_solutions({_,time1,_,_,_},{_,time2,_,_,_}) do
+  def compare({_,time1,_,_,_},{_,time2,_,_,_}) do
     time1 < time2
   end
 
@@ -64,5 +65,4 @@ defmodule Zurg do
          |> uniq
          |> map(&List.to_tuple/1)
   end
-
 end

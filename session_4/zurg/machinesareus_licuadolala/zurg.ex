@@ -9,17 +9,16 @@ defmodule Zurg do
     right = steps = []
     [{:right, time, left, right, steps}]
       |> complete_sequences
-      |> sort(&compare/2)  
-      |> take 1
+      |> fastest
   end
 
   def complete_sequences(sequences) do
     if complete? sequences do
       sequences
     else  
-      sequences |> map(&next_steps/1)
-                |> concat 
-                |> complete_sequences
+      sequences 
+        |> step 
+        |> complete_sequences
     end                   
   end
 
@@ -27,16 +26,19 @@ defmodule Zurg do
     {_, _, left, _, _} = at sequences, 0
     empty? left
   end
-
-  def compare({_,time1,_,_,_},{_,time2,_,_,_}) do
-    time1 < time2
+  
+  def step(sequences = [_|_]) do
+    sequences 
+      |> map(&step/1) 
+      |> concat  
   end
 
-  def next_steps(seq = {dir, _time, left, right, _steps}) do
-    case dir do
-      :right -> pairs left 
-      :left -> right
-    end |> map(&step(seq, &1))
+  def step(seq = {:right, _time, left, _right, _steps}) do
+    pairs(left) |> map &step(seq, &1)
+  end
+
+  def step(seq = {:left, _time, _left, right, _steps}) do
+    right |> map &step(seq, &1)
   end
 
   def step({:right, time, left, right, steps}, {t1,t2}) do
@@ -61,4 +63,11 @@ defmodule Zurg do
         |> uniq
         |> map(&List.to_tuple/1)
   end
+
+  def fastest(sequences) do
+    sequences |> sort(&compare/2) |> take 1
+  end
+
+  def compare({_,time1,_,_,_},{_,time2,_,_,_}), do: time1 < time2
+
 end

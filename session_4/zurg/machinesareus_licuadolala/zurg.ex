@@ -9,7 +9,7 @@ defmodule Zurg do
     right = steps = []
     [{:right, time, left, right, steps}]
       |> complete_sequences
-      |> fastest
+      |> pick_fastest
   end
 
   def complete_sequences(sequences) do
@@ -64,10 +64,10 @@ defmodule Zurg do
         |> map(&List.to_tuple/1)
   end
 
-  def fastest(sequences) do
-    sequences |> sort(&compare/2) |> take 1
+  def pick_fastest(sequences) do
+    sequences |> sort(&compare_time/2) |> hd
   end
 
-  def compare({_,time1,_,_,_},{_,time2,_,_,_}), do: time1 < time2
+  def compare_time({_,time1,_,_,_},{_,time2,_,_,_}), do: time1 < time2
 
 end

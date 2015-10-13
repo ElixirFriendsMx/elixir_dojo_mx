@@ -4,12 +4,16 @@ defmodule Zurg do
   @toys %{buzz: 5, woody: 10, rex: 20, hamm: 25}
 
   def solve() do
+    initial_state
+      |> complete_sequences
+      |> pick_fastest
+  end
+
+  def initial_state do
     time  = 0
     left  = Map.keys @toys
     right = steps = []
     [{:right, time, left, right, steps}]
-      |> complete_sequences
-      |> pick_fastest
   end
 
   def complete_sequences(sequences) do
@@ -64,9 +68,7 @@ defmodule Zurg do
         |> map(&List.to_tuple/1)
   end
 
-  def pick_fastest(sequences) do
-    sequences |> sort(&compare_time/2) |> hd
-  end
+  def pick_fastest(seqs), do: seqs |> sort(&compare_time/2) |> hd
 
   def compare_time({_,time1,_,_,_},{_,time2,_,_,_}), do: time1 < time2
 

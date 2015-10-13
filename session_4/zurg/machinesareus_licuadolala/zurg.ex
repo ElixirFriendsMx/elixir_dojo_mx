@@ -10,10 +10,7 @@ defmodule Zurg do
   end
 
   def initial_state do
-    time  = 0
-    left  = Map.keys @toys
-    right = steps = []
-    [{:right, time, left, right, steps}]
+    [{:right, 0, Map.keys(@toys), [], []}]
   end
 
   def complete_sequences(sequences) do

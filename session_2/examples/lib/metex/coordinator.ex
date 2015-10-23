@@ -10,9 +10,9 @@ defmodule Metex.Coordinator do
         loop(new_results, results_expected)
       :exit ->
         results |> Enum.sort |> Enum.join(", ") |> IO.puts
-      _ ->
+      msg ->
         require Logger
-        Logger.debug "Unknow message"
+        Logger.debug "Unknow message #{inspect msg}"
         loop(results, results_expected)
     end
   end 
